@@ -1,0 +1,79 @@
+version: '3'
+services:
+
+    la_db:
+        build:
+          context: ./db
+        image: la_db
+        container_name: la_db
+        expose:
+          - "3306"
+        restart: always
+#        command: mysqld --bind-address=0.0.0.0 --character-set-server=utf8 --collation-server=utf8_unicode_ci
+        volumes:
+          - la_db_vol:/var/lib/mysql
+        networks:
+          - la_servers_net
+
+    la_openldap:
+      image: osixia/openldap:1.2.3
+      container_name: la_openldap
+      environment:
+
+        LDAP_LOG_LEVEL: "256"
+        LDAP_ORGANISATION: "TUBITAK ULAKBIM"
+        LDAP_DOMAIN: "liderahenk.org"
+        LDAP_BASE_DN: "dc=liderahenk,dc=org"
+        LDAP_ADMIN_PASSWORD: "admin12345"
+        LDAP_CONFIG_PASSWORD: "config"
+        LDAP_READONLY_USER: "false"
+        #LDAP_READONLY_USER_USERNAME: "readonly"
+        #LDAP_READONLY_USER_PASSWORD: "readonly"
+        LDAP_RFC2307BIS_SCHEMA: "false"
+        LDAP_BACKEND: "hdb"
+        LDAP_TLS: "true"
+        LDAP_TLS_CRT_FILENAME: "ldap.crt"
+        LDAP_TLS_KEY_FILENAME: "ldap.key"
+        LDAP_TLS_DH_PARAM_FILENAME: "dhparam.pem"
+        LDAP_TLS_CA_CRT_FILENAME: "ca.crt"
+        LDAP_TLS_ENFORCE: "false"
+        LDAP_TLS_CIPHER_SUITE: "SECURE256:-VERS-SSL3.0"
+        LDAP_TLS_PROTOCOL_MIN: "3.1"
+        LDAP_TLS_VERIFY_CLIENT: "demand"
+        LDAP_REPLICATION: "false"
+        #LDAP_REPLICATION_CONFIG_SYNCPROV: "binddn="cn=admin,cn=config" bindmethod=simple credentials=$LDAP_CONFIG_PASSWORD searchbase="cn=config" type=refreshAndPersist retry="60 +" timeout=1 starttls=critical"
+        #LDAP_REPLICATION_DB_SYNCPROV: "binddn="cn=admin,$LDAP_BASE_DN" bindmethod=simple credentials=$LDAP_ADMIN_PASSWORD searchbase="$LDAP_BASE_DN" type=refreshAndPersist interval=00:00:00:10 retry="60 +" timeout=1 starttls=critical"
+        #LDAP_REPLICATION_HOSTS: "#PYTHON2BASH:['ldap://ldap.example.org','ldap://ldap2.example.org']"
+        KEEP_EXISTING_CONFIG: "false"
+        LDAP_REMOVE_CONFIG_AFTER_SETUP: "true"
+        LDAP_SSL_HELPER_PREFIX: "ldap"
+      tty: true
+      stdin_open: true
+      ports:
+        - "389:389"
+        - "636:636"
+      restart: always
+      volumes:
+        - la_openldap_varlibldap_vol:/var/lib/ldap
+        - la_openldap_slapdd_vol:/etc/ldap/slap.d
+        - la_openldap_certs:/container/service/slapd/assets/certs/
+      domainname: "liderahenk.org"
+      hostname: "liderahenk.org"
+      networks:
+        - la_servers_net
+
+
+volumes:
+  la_db_vol:
+  la_openldap_varlibldap_vol:
+  la_openldap_slapdd_vol:
+  la_openldap_certs:
+
+
+networks:
+  la_servers_net:
+    driver: bridge
+    ipam:
+     config:
+       - subnet: 172.168.50.0/24
+#         gateway: 172.10.5.1
