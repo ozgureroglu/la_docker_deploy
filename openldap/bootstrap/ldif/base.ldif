@@ -1,0 +1,5 @@
+dn: cn=liderAhenkConfig,dc=liderahenk,dc=org
+objectClass: pardusLiderAhenkConfig
+cn: liderAhenkConfig
+liderServiceAddress: http://lider.liderahenk.org:8181
+

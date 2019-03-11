@@ -16,10 +16,11 @@ services:
           - la_servers_net
 
     la_openldap:
-      image: osixia/openldap:1.2.3
+#      image: osixia/openldap:1.2.3
+      build:
+        context: ./openldap
       container_name: la_openldap
       environment:
-
         LDAP_LOG_LEVEL: "256"
         LDAP_ORGANISATION: "TUBITAK ULAKBIM"
         LDAP_DOMAIN: "liderahenk.org"
