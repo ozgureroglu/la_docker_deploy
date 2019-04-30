@@ -1,0 +1,112 @@
+version: 1
+
+
+
+dn: cn=liderAhenkConfig,dc=liderahenk,dc=org
+objectClass: pardusLiderAhenkConfig
+cn: liderAhenkConfig
+liderServiceAddress: http://192.168.56.123:8181
+
+dn: cn=lider_console,dc=liderahenk,dc=org
+objectClass: top
+objectClass: person
+objectClass: pardusLider
+objectClass: pardusAccount
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: lider_console
+sn: lider_console
+uid: lider_console
+userPassword:: e1NTSEF9Ti9UZ2VYbEU2bVhTejE1c3NodVppT0laWGl2blc0b1Q=
+liderPrivilege: [REPORT:ALL]
+liderPrivilege: [TASK:dc=liderahenk,dc=org:ALL]
+
+dn: ou=Ahenkler,dc=liderahenk,dc=org
+objectClass: top
+objectClass: pardusLider
+objectClass: organizationalUnit
+ou: Ahenkler
+description: pardusDeviceGroup
+
+dn: ou=Groups,dc=liderahenk,dc=org
+objectClass: top
+objectClass: pardusLider
+objectClass: organizationalUnit
+ou: Groups
+
+dn: ou=People,ou=Groups,dc=liderahenk,dc=org
+objectClass: top
+objectClass: pardusLider
+objectClass: organizationalUnit
+ou: People
+
+dn: uid=test_ldap_user,ou=People,ou=Groups,dc=liderahenk,dc=org
+objectClass: top
+objectClass: shadowAccount
+objectClass: posixAccount
+objectClass: person
+objectClass: pardusLider
+objectClass: pardusAccount
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: test_ldap_user
+gidNumber: 5000
+homeDirectory: /home/test_ldap_user
+sn: test_ldap_user
+uid: test_ldap_user
+uidNumber: 5000
+userPassword:: e1NTSEF9L21iMDJmeUcycThCUUtFTnJkeHFpUUlsTEFpa1FTS1c=
+description: test ldap user
+loginShell: /bin/bash
+
+dn: cn=adminGroups,ou=Groups,dc=liderahenk,dc=org
+objectClass: top
+objectClass: groupOfNames
+cn: adminGroups
+member: cn=admin,dc=liderahenk,dc=org
+description: User group with ldap write permission
+
+dn: ou=Roles,dc=liderahenk,dc=org
+objectClass: top
+objectClass: organizationalUnit
+ou: Roles
+description: Roles groups
+
+dn: cn=sample_role,ou=Roles,dc=liderahenk,dc=org
+objectClass: top
+objectClass: sudoRole
+cn: sample_role
+sudoCommand: ALL
+sudoHost: ALL
+sudoUser: ldap_user
+
+dn: ou=Policies,dc=liderahenk,dc=org
+objectClass: top
+objectClass: pardusLider
+objectClass: organizationalUnit
+ou: Policies
+description: password policy group
+
+dn: cn=DefaultPolicy,ou=Policies,dc=liderahenk,dc=org
+objectClass: top
+objectClass: pwdPolicy
+objectClass: person
+cn: DefaultPolicy
+pwdAttribute: userPassword
+sn: DefaultPolicy
+description: default password policy
+pwdAllowUserChange: TRUE
+pwdCheckQuality: 0
+pwdExpireWarning: 0
+pwdFailureCountInterval: 0
+pwdGraceAuthNLimit: 2
+pwdInHistory: 3
+pwdLockout: TRUE
+pwdLockoutDuration: 300
+pwdMaxAge: 30000
+pwdMaxFailure: 3
+pwdMinAge: 0
+pwdMinLength: 4
+pwdMustChange: TRUE
+pwdSafeModify: FALSE
+

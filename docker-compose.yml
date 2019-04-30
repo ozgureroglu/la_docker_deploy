@@ -64,11 +64,59 @@ services:
         - la_servers_net
 
 
+    ejabberd:
+        image: ibasaran/ejabberd
+        container_name: liderxmpp
+        tty: true
+        ports:
+          - 5222:5222
+          - 5269:5269
+          - 5280:5280
+        environment:
+          ERLANG_NODE: "liderahenk"
+          XMPP_DOMAIN: "im.liderahenk.org"
+          EJABBERD_ADMINS: "admin@im.liderahenk.org"
+          EJABBERD_USERS: "admin@im.liderahenk.org:secret lider_sunucu@im.liderahenk.org:secret"
+          EJABBERD_MOD_ADMIN_EXTRA: "true"
+          EJABBERD_MOD_MUC_ADMIN: "true"
+          EJABBERD_AUTH_METHOD: "internal anonymous ldap"
+          EJABBERD_LDAP_SERVERS: "openldap"
+          EJABBERD_LDAP_ROOTDN: "cn=admin,dc=liderahenk,dc=org"
+          EJABBERD_LDAP_PASSWORD: "secret"
+          EJABBERD_LDAP_BASE: "dc=liderahenk,dc=org"
+          EJABBERD_LDAP_UIDS: "uid:%u"
+          EJABBERD_STARTTLS: "false"
+          EJABBERD_S2S_SSL: "false"
+          EJABBERD_HTTPS: "false"
+        depends_on:
+          - la_openldap
+        networks:
+          - la_servers_net
+
+    lider:
+        build:
+          context: ./lider
+        image: la_lider
+        container_name: la_lider
+        restart: always
+        volumes:
+          - la_lider_vol:/srv
+        depends_on:
+          - la_db
+          - la_openldap
+        networks:
+          - la_servers_net
+
+
+
+
+
 volumes:
   la_db_vol:
   la_openldap_varlibldap_vol:
   la_openldap_slapdd_vol:
   la_openldap_certs:
+  la_lider_vol:
 
 
 networks:

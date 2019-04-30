@@ -1,6 +1,0 @@
-dn: ou=Ahenkler,dc=liderahenk,dc=org
-objectClass: pardusLider
-objectClass: organizationalUnit
-objectClass: top
-ou: Ahenkler
-description: pardusDeviceGroup
